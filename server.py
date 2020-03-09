@@ -1,18 +1,22 @@
 # Imports
 from flask import Flask, Blueprint, jsonify
+from flask_cors import CORS
 import os
 
 # Define app variable
 app = Flask(__name__)
 
+# Allow cross origin requests
+CORS(app)
+
 # Define port on which to listen
 port = int(os.environ.get("PORT", 5000))
 
 # Import route files
-from apis.globeMonitor import GlobeMonitorAPI
+from apis.appGalleryLite import AppGalleryLiteAPI
 
 # Register route files
-app.register_blueprint(GlobeMonitorAPI)
+app.register_blueprint(AppGalleryLiteAPI)
 
 # Root URL Route
 @app.route('/')

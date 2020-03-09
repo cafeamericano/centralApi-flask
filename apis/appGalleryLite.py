@@ -16,7 +16,7 @@ appsCollection = database["apps"]
 keywordsCollection = database["keywords"]
 
 # Define blueprint
-GlobeMonitorAPI = Blueprint('GlobeMonitorAPI', __name__)
+AppGalleryLiteAPI = Blueprint('AppGalleryLiteAPI', __name__)
 
 # Define reusable functions
 
@@ -31,12 +31,12 @@ def jsonResponse(dataset):
 
 # Begin routes
 
-@GlobeMonitorAPI.route("/GlobeMonitor/api/applications")
+@AppGalleryLiteAPI.route("/AppGalleryLite/api/applications")
 def sendApplications():
     dataset = appsCollection.find()
     return jsonResponse(dataset)
 
-@GlobeMonitorAPI.route("/GlobeMonitor/api/keywords")
+@AppGalleryLiteAPI.route("/AppGalleryLite/api/keywords")
 def sendKeywords():
     dataset = keywordsCollection.find()
     return jsonResponse(dataset)
