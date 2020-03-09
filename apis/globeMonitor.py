@@ -1,7 +1,42 @@
+# General imports
 from flask import Blueprint
+import os
 
+# MongoDB specific imports
+import pymongo
+from bson import json_util, ObjectId
+import json
+
+# Define database
+myclient = pymongo.MongoClient(os.getenv('DB_URL', "mongodb://localhost:27017"))
+database = myclient[(os.getenv('DB_NAME', "local-database-name"))]
+
+# Define collections
+appsCollection = database["apps"]
+keywordsCollection = database["keywords"]
+
+# Define blueprint
 GlobeMonitorAPI = Blueprint('GlobeMonitorAPI', __name__)
 
-@GlobeMonitorAPI.route("/GlobeMonitor/api/")
-def GlobeMonitorWelcome():
-    return "You have hit the root URL for the Globe Monitor API."
+# Define reusable functions
+
+def bsonToJson(item):
+    return json.loads(json_util.dumps(item))
+
+def jsonResponse(dataset):
+    arr = []
+    for item in dataset:
+        arr.append(bsonToJson(item))
+    return json.dumps(arr)
+
+# Begin routes
+
+@GlobeMonitorAPI.route("/GlobeMonitor/api/applications")
+def sendApplications():
+    dataset = appsCollection.find()
+    return jsonResponse(dataset)
+
+@GlobeMonitorAPI.route("/GlobeMonitor/api/keywords")
+def sendKeywords():
+    dataset = keywordsCollection.find()
+    return jsonResponse(dataset)
