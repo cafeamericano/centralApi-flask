@@ -21,7 +21,7 @@ app.register_blueprint(AppGalleryLiteAPI)
 # Root URL Route
 @app.route('/')
 def home():
-    return '<h2>Centralized API - Flask</h2><p>Version 0.1</p><p>The server is listening for requests.</p>'
+    return '<h2>Centralized API - Flask</h2><p>Version 1.0</p><p>The server is listening for requests.</p>'
 
 # Start server listening
 if __name__ == '__main__':
