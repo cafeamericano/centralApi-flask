@@ -33,7 +33,7 @@ def jsonResponse(dataset):
 
 @AppGalleryLiteAPI.route("/AppGalleryLite/api/applications")
 def sendApplications():
-    dataset = appsCollection.find().sort([("supportStatus", pymongo.DESCENDING), ("isFeatured", pymongo.DESCENDING), ("isCollaboration", pymongo.DESCENDING), ("publishDate", pymongo.DESCENDING) ])
+    dataset = appsCollection.find().sort([("isFeatured", pymongo.DESCENDING), ("publishDate", pymongo.DESCENDING) ])
     return jsonResponse(dataset)
 
 @AppGalleryLiteAPI.route("/AppGalleryLite/api/keywords")
