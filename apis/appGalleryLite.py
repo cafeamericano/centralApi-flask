@@ -1,5 +1,5 @@
 # General imports
-from flask import Blueprint
+from flask import Flask, Blueprint, request, jsonify
 import os
 
 # MongoDB specific imports
@@ -31,12 +31,60 @@ def jsonResponse(dataset):
 
 # Begin routes
 
-@AppGalleryLiteAPI.route("/AppGalleryLite/api/applications")
+@AppGalleryLiteAPI.route("/AppGalleryLite/api/applications", methods=['GET', 'POST', 'PUT', 'DELETE'])
 def sendApplications():
-    dataset = appsCollection.find().sort([("isFeatured", pymongo.DESCENDING), ("publishDate", pymongo.DESCENDING) ])
-    return jsonResponse(dataset)
 
-@AppGalleryLiteAPI.route("/AppGalleryLite/api/keywords")
+    if request.method == 'GET':
+        dataset = appsCollection.find().sort([("isFeatured", pymongo.DESCENDING), ("publishDate", pymongo.DESCENDING) ])
+        return jsonResponse(dataset)
+
+    if request.method == 'POST':
+        appsCollection.insert_one(request.json)
+        return jsonify(
+            code=200,
+            msg="Success"
+        )
+
+    if request.method == 'PUT':
+        myquery = {'_id': ObjectId(request.json['_id'])}
+        appsCollection.replace_one(myQuery, request.json, upsert=True)
+        return jsonify(
+            code=200,
+            msg="Success"
+        )
+
+    if request.method == 'DELETE':
+        appsCollection.delete_one({'_id': ObjectId(request.json['_id'])})
+        return jsonify(
+            code=200,
+            msg="Success"
+        )
+
+@AppGalleryLiteAPI.route("/AppGalleryLite/api/keywords", methods=['GET', 'POST', 'PUT', 'DELETE'])
 def sendKeywords():
-    dataset = keywordsCollection.find().sort([("type", pymongo.ASCENDING), ("name", pymongo.ASCENDING)])
-    return jsonResponse(dataset)
+
+    if request.method == 'GET':
+        dataset = keywordsCollection.find().sort([("type", pymongo.ASCENDING), ("name", pymongo.ASCENDING)])
+        return jsonResponse(dataset)
+    
+    if request.method == 'POST':
+        keywordsCollection.insert_one(request.json)
+        return jsonify(
+            code=200,
+            msg="Success"
+        )
+
+    if request.method == 'PUT':
+        myquery = {'_id': ObjectId(request.json['_id'])}
+        keywordsCollection.replace_one(myQuery, request.json, upsert=True)
+        return jsonify(
+            code=200,
+            msg="Success"
+        )
+
+    if request.method == 'DELETE':
+        keywordsCollection.delete_one({'_id': ObjectId(request.json['_id'])})
+        return jsonify(
+            code=200,
+            msg="Success"
+        )
